@@ -21,7 +21,6 @@ int main(int argc, char** argv)
     do {
         while (!kbhit()) { };
         printf("%c", getchar());
-        fflush(stdout);
     } while (true);
 
     return 0;
