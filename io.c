@@ -9,21 +9,21 @@
 
 
 struct timeval tv;
+fd_set fds;
 
 
 void kbhit_init()
 {
     tv.tv_sec = 0;
     tv.tv_usec = 0;
+    FD_ZERO(&fds); // for some reason we only have to do this once
 }
 
 
 int kbhit()
 {
-    fd_set fds;
-    FD_ZERO(&fds);
-    FD_SET(STDIN_FILENO, &fds); //STDIN_FILENO is 0
-    select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
+    FD_SET(STDIN_FILENO, &fds);
+    select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
     return FD_ISSET(STDIN_FILENO, &fds);
 }
 
@@ -43,4 +43,6 @@ void initialize_tty(struct termios* term_settings)
 
     setvbuf(stdin, NULL, _IONBF, BUFSIZ);
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
+
+    kbhit_init();
 }
